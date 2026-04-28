@@ -30,7 +30,8 @@ function playerturn() {
 var selectedIndex = -1;
 var currentDice = [];
 function move(clickedIndex) {
-   
+    
+
     if (selectedIndex === -1) {
         
         if (startpositionboard[clickedIndex] === 0) {

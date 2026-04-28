@@ -71,10 +71,16 @@
     <Content Include="Backgammon.html" />
     <Content Include="Backgammon.js" />
     <Content Include="black-removebg-preview.png" />
+    <Content Include="black.png" />
+    <Content Include="blackline-removebg-preview.png" />
+    <Content Include="redlines.png" />
     <Content Include="sss.jpeg" />
+    <Content Include="upsideblack.png" />
+    <Content Include="upsidewhite.png" />
     <Content Include="useful.jpg" />
     <Content Include="Web.config" />
     <Content Include="white-removebg-preview.png" />
+    <Content Include="white.png" />
     <Content Include="שש-בש.jpeg" />
   </ItemGroup>
   <ItemGroup>
