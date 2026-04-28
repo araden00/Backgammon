@@ -1,6 +1,6 @@
 ﻿body {
 }
-#board-container {
+board-container {
     width: 1000px;
     height: 1000px;
     background-image: url('שש-בש.jpeg');
@@ -24,4 +24,19 @@
 .blackbar  {
     background-color: black;
 }
-
+.button {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    align-content
+}
+.lines {
+    width: 60px;
+    height: auto; 
+    position: relative;
+    display: inline-block;
+    cursor: pointer;
+}

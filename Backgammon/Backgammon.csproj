@@ -70,9 +70,11 @@
     <Content Include="Backgammon.css" />
     <Content Include="Backgammon.html" />
     <Content Include="Backgammon.js" />
+    <Content Include="black-removebg-preview.png" />
     <Content Include="sss.jpeg" />
     <Content Include="useful.jpg" />
     <Content Include="Web.config" />
+    <Content Include="white-removebg-preview.png" />
     <Content Include="שש-בש.jpeg" />
   </ItemGroup>
   <ItemGroup>
