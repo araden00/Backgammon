@@ -1,19 +1,21 @@
-﻿function diceroll() {
+﻿var countturn = 0;
+var startpositionboard = [2, 0, 0, 0, 0, -5, 0, -3, 0, 0, 0, 5, -5, 0, 0, 0, 3, 0, 5, 0, 0, 0, 0, -2];//1-6 whitbase 18-24 black base
+var selectedIndex = -1;
+var currentDice = [];
+
+function diceroll() {
     var dice1 = Math.floor(Math.random() * 6) + 1;
     var dice2 = Math.floor(Math.random() * 6) + 1;
 
     if (dice1 === dice2) {
         currentDice = [dice1, dice1, dice1, dice1];
-        alert("דאבל! יצא: " + dice1);
+       
     } else {
         currentDice = [dice1, dice2];
-        alert("יצא: " + dice1 + " ו-" + dice2);
     }
+    document.getElementById("dice1").src = "dice_" + dice1 + "-removebg-preview.png";
+    document.getElementById("dice2").src = "dice_" + dice2 + "-removebg-preview.png";
 }
-
-
-let startpositionboard = [2, 0, 0, 0, 0, -5, 0, -3, 0, 0, 0, 5, -5, 0, 0, 0, 3, 0, 5, 0, 0, 0, 0, -2];//1-6 whitbase 18-24 black base
-var countturn = 0;
 function playerturn() {
     if (countturn % 2 === 0) {
         alert("Player 1's turn");
@@ -27,8 +29,7 @@ function playerturn() {
     }   
 
 }
-var selectedIndex = -1;
-var currentDice = [];
+
 function move(clickedIndex) {
     
 
@@ -38,15 +39,31 @@ function move(clickedIndex) {
             alert("אין פה חייל!");
             return;
         }
-        
-        selectedIndex = clickedIndex;
-        alert("בחרת חייל במיקום " + clickedIndex + ". עכשיו תלחץ על לאן להזיז.");
+        else {
+            selectedIndex = clickedIndex;
+            alert("בחרת חייל במיקום " + clickedIndex + ". עכשיו תלחץ על לאן להזיז.");
+        }
     }
 
     
     else {
         var from = selectedIndex;
         var to = clickedIndex;
+        var distance = Math.abs(to - from);
+        var foundDiceIndex = -1;
+
+        for (var i = 0; i < currentDice.length; i++) {
+            if (currentDice[i] === distance) {
+                foundDiceIndex = i;
+                break;
+            }
+        }
+
+        if (foundDiceIndex === -1) {
+            alert("אין לך קובייה מתאימה למהלך הזה!");
+            selectedIndex = -1;
+            return;
+        }
 
         var targetValue = startpositionboard[to];
 
@@ -64,8 +81,8 @@ function move(clickedIndex) {
         }
         
         else {
-            if (targetValue <= -2) {
-                alert("אי אפשר להזיז לכאן! המשבצת חסומה על ידי השחור.");
+            if (targetValue >= 2) {
+                alert("אי אפשר להזיז לכאן! המשבצת חסומה על ידי הלבן.");
                 selectedIndex = -1;
                 return;
             }
@@ -74,11 +91,7 @@ function move(clickedIndex) {
                 startpositionboard[to] = startpositionboard[to] - 1;
             }
         }
-
         alert("הזזת מ-" + from + " ל-" + to);
-        console.log(startpositionboard); 
-
-        
         selectedIndex = -1;
     }
 }

@@ -6,9 +6,7 @@
 </head>
 <body>
 
-    <div class=whitebar id="whitebar"></div>
-    <div class=blackbar id="blackbar"></div>
-    <button class="button" onclick="diceroll()">roll dice</button>
+
     <table>
     </table>
     <tr>
@@ -29,10 +27,8 @@
         <img class="lines" onclick="move(11)" src="upsidewhite.png" />
 
     </tr>
-    <img id="dice1" src="dice1.png" class="dice-image">
- 
-
     <br />
+
     <tr>
         <img class="lines" onclick="move(18)" src="white.png" />
         <img class="lines" onclick="move(19)" src="black.png" />
@@ -49,11 +45,11 @@
         <img class="lines" onclick="move(15)" src="black.png" />
         <img class="lines" onclick="move(16)" src="white.png" />
         <img class="lines" onclick="move(17)" src="black.png" />
-
     </tr>
     </table>
-    <img id="dice2" src="dice1.png" class="dice-image">
+    <img id="dice2" class="dice" onclick="diceroll()" src="dice_1-removebg-preview.png" />
+    <img id="dice1" class="dice" onclick="diceroll()" src="dice_1-removebg-preview.png" />
     <script src="Backgammon.js"></script>
-
+    <link href="Backgammon.css" rel="stylesheet" />
 </body>
 </html>

@@ -1,42 +1,7 @@
 ﻿body {
+    background-color:darkgreen
 }
-board-container {
-    width: 1000px;
-    height: 1000px;
-    background-image: url('שש-בש.jpeg');
-    background-size: cover;
-    position: relative; 
-    margin: 0 auto;
-}
-
-.piece {
-    width: 30px;
-    height: 30px;
-    border-radius: 50%;
-    position: absolute;
-    border: 2px solid #333;
-}
-
-.whitebar {
-    background-color: white;
-}
-
-.blackbar  {
-    background-color: black;
-}
-.button {
-    position: absolute;
-    top: 10px;
-    left: 10px;
-    padding: 10px 20px;
-    font-size: 16px;
-    cursor: pointer;
-    align-content: center;
-}
-.lines {
-    width: 60px;
-    height: auto; 
-    position: relative;
-    display: inline-block;
-    cursor: pointer;
+.dice {
+    width: 300px;
+    height: 300px;
 }

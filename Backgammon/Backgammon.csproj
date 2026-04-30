@@ -73,6 +73,12 @@
     <Content Include="black-removebg-preview.png" />
     <Content Include="black.png" />
     <Content Include="blackline-removebg-preview.png" />
+    <Content Include="dice_1-removebg-preview.png" />
+    <Content Include="dice_2-removebg-preview.png" />
+    <Content Include="dice_3-removebg-preview.png" />
+    <Content Include="dice_4-removebg-preview.png" />
+    <Content Include="dice_5-removebg-preview.png" />
+    <Content Include="dice_6-removebg-preview.png" />
     <Content Include="redlines.png" />
     <Content Include="sss.jpeg" />
     <Content Include="upsideblack.png" />
