@@ -7,45 +7,45 @@
 <body>
 
 
-    <table>
-    </table>
-    <tr>
-        <img class="lines" onclick="move(0)" src="upsideblack.png" />
-        <img class="lines" onclick="move(1)" src="upsidewhite.png" />
-        <img class="lines" onclick="move(2)" src="upsideblack.png" />
-        <img class="lines" onclick="move(3)" src="upsidewhite.png" />
-        <img class="lines" onclick="move(4)" src="upsideblack.png" />
-        <img class="lines" onclick="move(5)" src="upsidewhite.png" />
+    <table class="board" style="border:solid">
+    
+     <tr>
+        <img id="slot-0" class="lines" onclick="move(0)" src="upsideblack.png" />
+        <img id="slot-1" class="lines" onclick="move(1)" src="upsidewhite.png" />
+        <img id="slot-2" class="lines" onclick="move(2)" src="upsideblack.png" />
+        <img id="slot-3" class="lines" onclick="move(3)" src="upsidewhite.png" />
+        <img id="slot-4" class="lines" onclick="move(4)" src="upsideblack.png" />
+        <img id="slot-5" class="lines" onclick="move(5)" src="upsidewhite.png" />
 
         <img src="blackline-removebg-preview.png" />
 
-        <img class="lines" onclick="move(6)" src="upsideblack.png" />
-        <img class="lines" onclick="move(7)" src="upsidewhite.png" />
-        <img class="lines" onclick="move(8)" src="upsideblack.png" />
-        <img class="lines" onclick="move(9)" src="upsidewhite.png" />
-        <img class="lines" onclick="move(10)" src="upsideblack.png" />
-        <img class="lines" onclick="move(11)" src="upsidewhite.png" />
+        <img id="slot-6" class="lines" onclick="move(6)" src="upsideblack.png" />
+        <img id="slot-7" class="lines" onclick="move(7)" src="upsidewhite.png" />
+        <img id="slot-8" class="lines" onclick="move(8)" src="upsideblack.png" />
+        <img id="slot-9" class="lines" onclick="move(9)" src="upsidewhite.png" />
+        <img id="slot-10" class="lines" onclick="move(10)" src="upsideblack.png" />
+        <img id="slot-11" class="lines" onclick="move(11)" src="upsidewhite.png" />
 
-    </tr>
-    <br />
+     </tr>
+     <br />
 
-    <tr>
-        <img class="lines" onclick="move(18)" src="white.png" />
-        <img class="lines" onclick="move(19)" src="black.png" />
-        <img class="lines" onclick="move(20)" src="white.png" />
-        <img class="lines" onclick="move(21)" src="black.png" />
-        <img class="lines" onclick="move(22)" src="white.png" />
-        <img class="lines" onclick="move(23)" src="black.png" />
+     <tr>
+        <img id="slot-23" class="lines" onclick="move(23)" src="white.png" />
+        <img id="slot-22" class="lines" onclick="move(22)" src="black.png" />
+        <img id="slot-21" class="lines" onclick="move(21)" src="white.png" />
+        <img id="slot-20" class="lines" onclick="move(20)" src="black.png" />
+        <img id="slot-19" class="lines" onclick="move(19)" src="white.png" />
+        <img id="slot-18" class="lines" onclick="move(18)" src="black.png" />
 
         <img src="blackline-removebg-preview.png" />
 
-        <img class="lines" onclick="move(12)" src="white.png" />
-        <img class="lines" onclick="move(13)" src="black.png" />
-        <img class="lines" onclick="move(14)" src="white.png" />
-        <img class="lines" onclick="move(15)" src="black.png" />
-        <img class="lines" onclick="move(16)" src="white.png" />
-        <img class="lines" onclick="move(17)" src="black.png" />
-    </tr>
+        <img id="slot-17" class="lines" onclick="move(17)" src="white.png" />
+        <img id="slot-16" class="lines" onclick="move(16)" src="black.png" />
+        <img id="slot-15" class="lines" onclick="move(15)" src="white.png" />
+        <img id="slot-14" class="lines" onclick="move(14)" src="black.png" />
+        <img id="slot-13" class="lines" onclick="move(13)" src="white.png" />
+        <img id="slot-12" class="lines" onclick="move(12)" src="black.png" />
+     </tr>
     </table>
     <img id="dice2" class="dice" onclick="diceroll()" src="dice_1-removebg-preview.png" />
     <img id="dice1" class="dice" onclick="diceroll()" src="dice_1-removebg-preview.png" />

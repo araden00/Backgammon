@@ -1,7 +1,35 @@
 ﻿body {
-    background-color:darkgreen
+    background-color:white
 }
 .dice {
     width: 300px;
     height: 300px;
+}
+.lines{
+    background-color: burlywood;
+}
+.piece {
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+    border: 1px solid black;
+    margin: 2px auto;
+}
+
+.white-piece {
+    background-color: white;
+}
+
+.black-piece {
+    background-color: black;
+}
+
+/* המיכל של החיילים - נצמיד אותו למקום */
+.pieces-display {
+    position: absolute;
+    width: 30px; /* רוחב המשולש בערך */
+    display: flex;
+    flex-direction: column;
+    pointer-events: none; /* שלא יפריע ללחיצה על המשולש */
+    z-index: 10;
 }

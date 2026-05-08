@@ -70,6 +70,7 @@
     <Content Include="Backgammon.css" />
     <Content Include="Backgammon.html" />
     <Content Include="Backgammon.js" />
+    <Content Include="Backgammonstartingscreen.html" />
     <Content Include="black-removebg-preview.png" />
     <Content Include="black.png" />
     <Content Include="blackline-removebg-preview.png" />
