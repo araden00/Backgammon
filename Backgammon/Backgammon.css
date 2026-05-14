@@ -24,12 +24,12 @@
     background-color: black;
 }
 
-/* המיכל של החיילים - נצמיד אותו למקום */
+
 .pieces-display {
     position: absolute;
-    width: 30px; /* רוחב המשולש בערך */
+    width: 30px; 
     display: flex;
     flex-direction: column;
-    pointer-events: none; /* שלא יפריע ללחיצה על המשולש */
+    pointer-events: none; 
     z-index: 10;
 }
