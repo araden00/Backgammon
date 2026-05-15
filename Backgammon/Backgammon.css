@@ -1,5 +1,5 @@
 ﻿body {
-    background-color:white
+    background-color: white;
 }
 .dice {
     width: 300px;
@@ -7,29 +7,4 @@
 }
 .lines{
     background-color: burlywood;
-}
-.piece {
-    width: 25px;
-    height: 25px;
-    border-radius: 50%;
-    border: 1px solid black;
-    margin: 2px auto;
-}
-
-.white-piece {
-    background-color: white;
-}
-
-.black-piece {
-    background-color: black;
-}
-
-
-.pieces-display {
-    position: absolute;
-    width: 30px; 
-    display: flex;
-    flex-direction: column;
-    pointer-events: none; 
-    z-index: 10;
 }
