@@ -104,6 +104,7 @@
     <Content Include="black-9white.png" />
     <Content Include="black-removebg-preview.png" />
     <Content Include="black.png" />
+    <Content Include="turn2.jpg" />
     <Content Include="blackline-removebg-preview.png" />
     <Content Include="dice_1-removebg-preview.png" />
     <Content Include="dice_2-removebg-preview.png" />
@@ -181,6 +182,7 @@
     <Content Include="upsidewhite.png" />
     <Content Include="useful.jpg" />
     <Content Include="Web.config" />
+    <Content Include="turn1.jpg" />
     <Content Include="white-10black.png" />
     <Content Include="white-10white.png" />
     <Content Include="white-11black.png" />
