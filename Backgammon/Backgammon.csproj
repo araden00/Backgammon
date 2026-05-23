@@ -72,6 +72,7 @@
     <Content Include="Backgammon.js" />
     <Content Include="Backgammonstartingscreen.html" />
     <Content Include="background.png" />
+    <Content Include="backgroundmusic.mp3" />
     <Content Include="black-10black.png" />
     <Content Include="black-10white.png" />
     <Content Include="black-11black.png" />
@@ -104,6 +105,8 @@
     <Content Include="black-9white.png" />
     <Content Include="black-removebg-preview.png" />
     <Content Include="black.png" />
+    <Content Include="dicerollsound.mp3" />
+    <Content Include="piecemovesound.mp3" />
     <Content Include="turn2.jpg" />
     <Content Include="blackline-removebg-preview.png" />
     <Content Include="dice_1-removebg-preview.png" />

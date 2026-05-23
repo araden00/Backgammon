@@ -6,9 +6,12 @@ var whiteEaten = 0; // כמה לבנים אכולים יש
 var blackEaten = 0; // כמה שחורים אכולים יש
 var whiteScore = 0; // כמה נקודות יש לשחקן הלבן
 var blackScore = 0; // כמה נקודות יש לשחקן השחור
-var currentPlayer=1;// משתנה גלובלי שיחזיק את השחקן הנוכחי (1 או 2), ניתן לעדכן אותו בפונקציה playerturn ולהשתמש בו בפונקציה move כדי לדעת איזה חיילים מותר להזיז
+var currentPlayer = 1;// משתנה גלובלי שיחזיק את השחקן הנוכחי (1 או 2), ניתן לעדכן אותו בפונקציה playerturn ולהשתמש בו בפונקציה move כדי לדעת איזה חיילים מותר להזיז
+var musicStarted = false; // משתנה שיזכור אם כבר לחצנו Play Music כדי להפעיל את המוזיקה, כדי שהכפתור יפעל נכון בפעם הראשונה ובפעמים הבאות
+var bgMusic = new Audio('backgroundmusic.mp3'); // יצירת אובייקט מוזיקה גלובלי כדי שנוכל לשלוט עליו מכל פונקציה
 function diceroll()// מגריל שתי קוביות מ1-6 אם נשארו קוביות שלא נוצלו, אל תיתן לגלגל שוב
 {   
+   
     var diceRemaining = false;
     for (var i = 0; i < currentDice.length; i++)
     {
@@ -17,32 +20,28 @@ function diceroll()// מגריל שתי קוביות מ1-6 אם נשארו קו�
             diceRemaining = true;
         }
     }
-
-    if (diceRemaining)
+    if (diceRemaining==true)
     {
-        alert("עליך לנצל את כל הקוביות לפני הגלגול הבא!");
         return;
     }
-
     var dice1 = Math.floor(Math.random() * 6) + 1;
     var dice2 = Math.floor(Math.random() * 6) + 1;
-
-    if (dice1 === dice2)
+    if (dice1 == dice2)
     {
         currentDice = [dice1, dice1, dice1, dice1];
     } else
     {
         currentDice = [dice1, dice2];
     }
-
+    var dicesound = new Audio('dicerollsound.mp3');
+    dicesound.volume = 0.3;
+    dicesound.play();
     document.getElementById("dice1").src = "dice_" + dice1 + "-removebg-preview.png";
     document.getElementById("dice2").src = "dice_" + dice2 + "-removebg-preview.png";
-
-    
 }
-function playerturn()//determine which player's turn it is based on the countturn variable, and alert the player whose turn it is
+function playerturn()// פונקציה שמחזירה את השחקן הנוכחי על פי מספר התור, היא גם מעדכנת את משתנה currentPlayer שניתן להשתמש בו בפונקציה move כדי לדעת איזה חיילים מותר להזיז
 {
-    if (countturn % 2 === 0)
+    if (countturn % 2 == 0)
     {
         /*alert("Player 1's turn");*/
         countturn++;
@@ -56,110 +55,84 @@ function playerturn()//determine which player's turn it is based on the counttur
     }
 
 }
-
-function move(clickedIndex) //check turn+piece ownership+eaten pieces+valid move+update board and visuals takes the index of the clicked piece or target square as a parameter
+function move(clickedIndex)// פונקציה שמטפלת בלחיצות על הלוח, היא צריכה לטפל בשלושה מצבים: 1. אם יש חיילים אכולים, היא צריכה לנסות להכניס אותם חזרה ללוח במקום המתאים. 2. אם השחקן יכול להתחיל להוציא חיילים (כל החיילים שלו בבית ואין לו אכולים), לחיצה כפולה על חייל תוציא אותו מהמשחק. 3. בחירה ותנועה רגילה של חיילים, כולל בדיקת חוקי התנועה והאכילה.
 {
-    // 1. זיהוי השחקן הנוכחי
-    var turnOwner;
-    if (countturn % 2 === 0)
+    var turnOwner; // הצהרה על המשתנה
+
+    if (countturn % 2 == 0)
     {
-        turnOwner = 1;
+        turnOwner = 1; // אם השארית היא 0, התור של שחקן 1
     } else
     {
-        turnOwner = 2;
+        turnOwner = 2; // אחרת, התור של שחקן 2
     }
 
-    // 2. בדיקה: האם לשחקן יש חיילים אכולים?
-    if (turnOwner === 1 && whiteEaten > 0)
+    // 1. טיפול בחיילים אכולים
+    if (turnOwner == 1 && whiteEaten > 0)
     {
         reEnterPiece(clickedIndex);
         return;
     }
-    if (turnOwner === 2 && blackEaten > 0)
-    {
+    if (turnOwner == 2 && blackEaten > 0) 
+    { 
         reEnterPiece(clickedIndex);
-        return;
+        return; 
     }
-
-    // --- לוגיקה להוצאת חיילים (Bear Off) ---
-
-    // בדיקה עבור שחקן לבן
-    if (turnOwner === 1 && canPlayerBearOffWhite(1) === true)
+    // 2. לוגיקה של הוצאת חיילים (Bear Off) - לחיצה כפולה
+    if (selectedIndex == clickedIndex && selectedIndex !== -1)
     {
-        if (selectedIndex === clickedIndex && selectedIndex !== -1)
+        var from = selectedIndex;
+        var diceIdx = -1;
+
+        if (turnOwner == 1 && canPlayerBearOffWhite(1))
         {
-            var from = selectedIndex;
-            var requiredDice = 24 - from;
-            var diceIdx = -1;
+            var requiredDice = 24 - from; // מרחק ליציאה (למשל מ-23 צריך 1)
 
             for (var i = 0; i < currentDice.length; i++)
             {
                 if (currentDice[i] > 0)
                 {
-                    if (currentDice[i] === requiredDice)
+                    if (currentDice[i] == requiredDice)
                     {
-                        diceIdx = i;
-                        break;
+                        diceIdx = i; break;
                     }
+                    // חוק שש-בש: מותר להוציא עם קובייה גבוהה יותר אם אין חיילים רחוקים יותר
                     if (currentDice[i] > requiredDice)
                     {
                         var pieceBehind = false;
                         for (var j = 18; j < from; j++)
                         {
-                            if (startpositionboard[j] > 0)
-                            {
-                                pieceBehind = true;
-                            }
+                            if (startpositionboard[j] > 0) pieceBehind = true;
                         }
-                        if (pieceBehind === false)
-                        {
+                        if (!pieceBehind) {
                             diceIdx = i; break;
                         }
                     }
                 }
             }
-
-            if (diceIdx !== -1)
+            if (diceIdx != -1)
             {
-                startpositionboard[from] = startpositionboard[from] - 1;
+                startpositionboard[from]--;
+                whiteScore++;
                 currentDice[diceIdx] = 0;
                 selectedIndex = -1;
                 updateBoardVisuals();
                 checkwinner();
-
-                var hasMoreMoves = false;
-                for (var d = 0; d < currentDice.length; d++)
-                {
-                    if (currentDice[d] > 0)
-                    {
-                        hasMoreMoves = true;
-                    }
-                }
-                if (hasMoreMoves === false)
-                {
-                    currentPlayer = playerturn();
-                }
+                finishTurnIfNeeded();
                 return;
             }
         }
-    }
 
-    // בדיקה עבור שחקן שחור
-    if (turnOwner === 2 && canPlayerBearOffBlack(2) === true)
-    {
-        if (selectedIndex === clickedIndex && selectedIndex !== -1)
+        if (turnOwner == 2 && canPlayerBearOffBlack(2))
         {
-            var from = selectedIndex;
-            var requiredDice = from + 1;
-            var diceIdx = -1;
+            var requiredDice = from + 1; // מרחק ליציאה (למשל מ-0 צריך 1)
 
             for (var i = 0; i < currentDice.length; i++)
             {
                 if (currentDice[i] > 0) {
                     if (currentDice[i] === requiredDice)
                     {
-                        diceIdx = i;
-                        break;
+                        diceIdx = i; break;
                     }
                     if (currentDice[i] > requiredDice)
                     {
@@ -171,123 +144,138 @@ function move(clickedIndex) //check turn+piece ownership+eaten pieces+valid move
                                 pieceBehind = true;
                             }
                         }
-                        if (pieceBehind === false) { diceIdx = i; break; }
+                        if (!pieceBehind)
+                        {
+                            diceIdx = i; break;
+                        }
                     }
                 }
             }
-
-            if (diceIdx !== -1)
+            if (diceIdx != -1)
             {
-                startpositionboard[from] = startpositionboard[from] + 1;
+                startpositionboard[from]++;
+                blackScore++;
                 currentDice[diceIdx] = 0;
                 selectedIndex = -1;
                 updateBoardVisuals();
                 checkwinner();
-
-                var hasMoreMoves = false;
-                for (var d = 0; d < currentDice.length; d++)
-                {
-                    if (currentDice[d] > 0) {
-                        hasMoreMoves = true;
-                    }
-                }
-                if (hasMoreMoves === false) { currentPlayer = playerturn(); }
+                finishTurnIfNeeded();
                 return;
             }
         }
     }
 
-    // 3. לוגיקה לתנועה רגילה על הלוח
-    if (selectedIndex !== -1 || (turnOwner === 1 && startpositionboard[clickedIndex] > 0) || (turnOwner === 2 && startpositionboard[clickedIndex] < 0)) {
-
-        if (selectedIndex === -1)
+    // 3. בחירה ותנועה רגילה
+    if (selectedIndex == -1)
+    {
+        if ((turnOwner == 1 && startpositionboard[clickedIndex] > 0) ||(turnOwner === 2 && startpositionboard[clickedIndex] < 0))
         {
-            if (startpositionboard[clickedIndex] === 0) {
-                return;
-            } else
-            {
-                selectedIndex = clickedIndex;
+            selectedIndex = clickedIndex;
+        }
+    }
+    else
+    {
+        var from = selectedIndex;
+        var to = clickedIndex;
+
+        // מניעת תנועה אחורה
+        if (turnOwner == 1 && to <= from)
+        {
+            selectedIndex = -1; return;
+        }
+        if (turnOwner == 2 && to >= from)
+        {
+            selectedIndex = -1; return;
+        }
+        var distance = Math.abs(to - from);
+        var foundDiceIndex = -1;
+
+        for (var i = 0; i < currentDice.length; i++)
+        {
+            if (currentDice[i] == distance && distance !== 0) {
+                foundDiceIndex = i;
+                break;
             }
+        }
+        if (foundDiceIndex == -1)
+        {
+            selectedIndex = -1; return;
+        }
+        var targetValue = startpositionboard[to];
+        if (turnOwner == 1)
+        {
+            if (targetValue <= -2)
+            {
+                selectedIndex = -1; return;
+            }
+            if (targetValue == -1)
+            {
+                blackEaten++; startpositionboard[to] = 1;
+            }
+            else
+            {
+                startpositionboard[to]++;
+            }
+            startpositionboard[from]--;
         }
         else
         {
-            var from = selectedIndex;
-            var to = clickedIndex;
-            var distance = Math.abs(to - from);
-            var foundDiceIndex = -1;
-
-            for (var i = 0; i < currentDice.length; i++)
-            {
-                if (currentDice[i] === distance && distance !== 0) {
-                    foundDiceIndex = i;
-                    break;
-                }
-            }
-
-            if (foundDiceIndex === -1)
+            if (targetValue >= 2)
             {
                 selectedIndex = -1;
                 return;
             }
-
-            var targetValue = startpositionboard[to];
-
-            if (startpositionboard[from] > 0)
-            { // לבן
-                if (targetValue <= -2)
-                {
-                    selectedIndex = -1;
-                    return;
-                } else if (targetValue === -1)
-                {
-                    blackEaten = blackEaten + 1;
-                    startpositionboard[to] = 1;
-                    startpositionboard[from] = startpositionboard[from] - 1;
-                } else
-                {
-                    startpositionboard[from] = startpositionboard[from] - 1;
-                    startpositionboard[to] = startpositionboard[to] + 1;
-                }
-            } else { // שחור
-                if (targetValue >= 2)
-                {
-                    selectedIndex = -1;
-                    return;
-                } else if (targetValue === 1)
-                {
-                    whiteEaten = whiteEaten + 1;
-                    startpositionboard[to] = -1;
-                    startpositionboard[from] = startpositionboard[from] + 1;
-                } else
-                {
-                    startpositionboard[from] = startpositionboard[from] + 1;
-                    startpositionboard[to] = startpositionboard[to] - 1;
-                }
-            }
-
-            currentDice[foundDiceIndex] = 0;
-            updateBoardVisuals();
-            selectedIndex = -1;
-
-            var hasMoreMoves = false;
-            for (var j = 0; j < currentDice.length; j++)
+            if (targetValue == 1)
             {
-                if (currentDice[j] > 0)
-                {
-                    hasMoreMoves = true;
-                    break;
-                }
+                whiteEaten++;
+                startpositionboard[to] = -1;
             }
-
-            if (hasMoreMoves === false)
+            else
             {
-                currentPlayer = playerturn();
+                startpositionboard[to]--;
             }
+            startpositionboard[from]++;
         }
+
+        currentDice[foundDiceIndex] = 0;
+        updateBoardVisuals();
+        selectedIndex = -1;
+        checkwinner();
+        finishTurnIfNeeded();
     }
 }
+function skipTurn()// פונקציה שמאפשרת לשחקן לדלג על תורו אם אין לו מהלכים חוקיים, היא מאפסת את הקוביות ומעבירה את התור לשחקן הבא
+{
+    // 1. איפוס הקוביות של התור הנוכחי
+    currentDice = [0, 0, 0, 0];
 
+    // 2. עדכון ויזואלי (כדי שהשחקן יראה שהקוביות נעלמו)
+    // אם יש לך אלמנטים שמציגים את מספר הקוביות, כדאי לאפס אותם כאן
 
+    // 3. העברת התור לשחקן הבא באמצעות הפונקציה הקיימת שלך
+    currentPlayer = playerturn();
+
+    // 4. הודעה לשחקן
+    alert("אין מהלכים חוקיים, התור עובר ליריב.");
+
+    // 5. איפוס הבחירה למקרה שחייל היה מסומן
+    selectedIndex = -1;
+    updateBoardVisuals();
+}
+
+// פונקציית עזר לסיום תור כדי לא לשכפל קוד
+function finishTurnIfNeeded() // בודקת אם יש קוביות שנותרו לתור הנוכחי, ואם לא, עוברת לתור הבא
+{
+    var movesLeft = false;
+    for (var j = 0; j < currentDice.length; j++)
+    {
+        if (currentDice[j] > 0)
+        {
+            movesLeft = true;
+        }
+    }
+    if (!movesLeft) currentPlayer = playerturn();
+}
 function updateBoardVisuals()// פונקציה שמעדכנת את התמונות על פי מצב הלוח הנוכחי, יש להפעיל אותה אחרי כל שינוי בלוח עוברת על המארח של הלוח ומדביקה תמונות בהתאם
 {
     for (var i = 0; i < 24; i++)
@@ -295,27 +283,30 @@ function updateBoardVisuals()// פונקציה שמעדכנת את התמונו�
         var count = startpositionboard[i];
         var imgElement = document.getElementById("img" + i); // וודא שב-HTML ה-ID הוא img0, img1...
 
-        if (!imgElement) continue; // הגנה למקרה ששכחת ID באחת התמונות
+        if (!imgElement)
+        {
+            continue;
+        }
 
         var direction = (i <= 11) ? "upside" : "";
-        var boardColor = (i % 2 === 0) ? "black" : "white";
+        var boardColor = (i % 2 == 0) ? "black" : "white";
 
         if (count > 0)
         {
-            // שים לב למקף (-) שהוספתי לפי הפורמט שלך
             imgElement.src = direction + boardColor + "-" + count + "white.png";
         }
         else if (count < 0)
         {
-            // Math.abs הופך 5- ל-5
             imgElement.src = direction + boardColor + "-" + Math.abs(count) + "black.png";
         }
         else
         {
-            // תמונה ריקה
             imgElement.src = direction + boardColor + ".png";
         }
     }
+    var movesound = new Audio('piecemovesound.mp3');
+    movesound.volume = 0.3;
+    movesound.play();
 }
 function resetGame()// פונקציה שמאתחלת את המשחק למצב ההתחלתי, מאפסת את כל המשתנים ומעדכנת את הלוח, ניתן לקרוא לה על ידי כפתור "אתחל משחק"
 {
@@ -333,10 +324,11 @@ function resetGame()// פונקציה שמאתחלת את המשחק למצב ה
 function reEnterPiece(clickedIndex)
 {
     var turnOwner;
-    if (countturn % 2 === 0)
+    if (countturn % 2 == 0)
     {
         turnOwner = 1; // לבן
-    } else
+    }
+    else
     {
         turnOwner = 2; // שחור
     }
@@ -346,7 +338,7 @@ function reEnterPiece(clickedIndex)
     var distance;
 
     // חישוב המרחק שהקובייה צריכה לעשות כדי להיכנס
-    if (turnOwner === 1)
+    if (turnOwner == 1)
     {
         // שחקן לבן נכנס למשבצות 0 עד 5
         // אם לחץ על 0, הוא צריך קובייה 1. אם לחץ על 5, הוא צריך קובייה 6.
@@ -358,14 +350,14 @@ function reEnterPiece(clickedIndex)
     }
 
     // בדיקה: האם המשבצת בטווח הכניסה החוקי של השחקן?
-    if (turnOwner === 1)
+    if (turnOwner == 1)
     {
         if (to < 0 || to > 5)
         {
             return; // לבן יכול להיכנס רק ל-0 עד 5
         }
     }
-    if (turnOwner === 2)
+    if (turnOwner == 2)
     {
         if (to < 18 || to > 23)
         {
@@ -377,7 +369,7 @@ function reEnterPiece(clickedIndex)
     var foundDiceIndex = -1;
     for (var i = 0; i < currentDice.length; i++)
     {
-        if (currentDice[i] === distance)
+        if (currentDice[i] == distance)
         {
             foundDiceIndex = i;
             break;
@@ -385,13 +377,13 @@ function reEnterPiece(clickedIndex)
     }
 
     // אם לא מצאנו קובייה מתאימה, אי אפשר להיכנס
-    if (foundDiceIndex === -1)
+    if (foundDiceIndex == -1)
     {
         return;
     }
 
     // בדיקה: האם המשבצת חסומה על ידי היריב?
-    if (turnOwner === 1)
+    if (turnOwner == 1)
     {
         if (targetValue <= -2)
         {
@@ -399,11 +391,12 @@ function reEnterPiece(clickedIndex)
             return;
         }
         // כניסה של לבן
-        if (targetValue === -1)
+        if (targetValue == -1)
         {
             blackEaten = blackEaten + 1; // אכילה
             startpositionboard[to] = 1;
-        } else
+        }
+        else
         {
             startpositionboard[to] = startpositionboard[to] + 1;
         }
@@ -417,11 +410,12 @@ function reEnterPiece(clickedIndex)
             return;
         }
         // כניסה של שחור
-        if (targetValue === 1)
+        if (targetValue == 1)
         {
             whiteEaten = whiteEaten + 1; // אכילה
             startpositionboard[to] = -1;
-        } else
+        }
+        else
         {
             startpositionboard[to] = startpositionboard[to] - 1;
         }
@@ -431,6 +425,10 @@ function reEnterPiece(clickedIndex)
     // סגירת המהלך
     currentDice[foundDiceIndex] = 0;
     updateBoardVisuals();
+    
+    var movesound = new Audio('piecemovesound.mp3');
+    movesound.volume = 0.3;
+    movesound.play();
 
     // בדיקה אם נגמרו כל הקוביות בתור
     var movesLeft = false;
@@ -442,45 +440,45 @@ function reEnterPiece(clickedIndex)
         }
     }
 
-    if (movesLeft === false) 
+    if (movesLeft == false) 
     {
         currentPlayer = playerturn();
     }
 }
-function canPlayerBearOffWhite(player)
+function canPlayerBearOffWhite(player)// פונקציה שבודקת אם שחקן יכול להתחיל להוציא חיילים, כלומר כל החיילים שלו נמצאים בבית שלו (לבן: 18-23)  ואין לו חיילים אכולים
 {
-    if (player === 1 && whiteEaten > 0)
+    if (player == 1 && whiteEaten > 0)
     {
         return false;
     }
     for (var i = 0; i < 24; i++)
     {
         // לשחקן 1 (לבן): מחפשים חייל מחוץ לטווח 18-23
-        if (player === 1 && startpositionboard[i] > 0 && i < 18)
+        if (player == 1 && startpositionboard[i] > 0 && i < 18)
         {
             return false;
         }
     }
     return true; // כל החיילים בבית
 }
-function canPlayerBearOffBlack(player)
+function canPlayerBearOffBlack(player)// פונקציה שבודקת אם שחקן יכול להתחיל להוציא חיילים, כלומר כל החיילים שלו (שחור: 0-5) נמצאים בבית שלו ואין לו חיילים אכולים
 {
     // אם יש חייל אכול, אי אפשר להוציא חיילים!
-    if (player === 2 && blackEaten > 0)
+    if (player == 2 && blackEaten > 0)
     {
         return false;
     }
     for (var i = 0; i < 24; i++)
     {
         // לשחקן 2 (שחור): מחפשים חייל מחוץ לטווח 0-5
-        if (player === 2 && startpositionboard[i] < 0 && i > 5)
+        if (player == 2 && startpositionboard[i] < 0 && i > 5)
         {
             return false;
         }
     }
     return true; // כל החיילים בבית
 }
-function checkwinner()
+function checkwinner()// פונקציה שבודקת אם אחד השחקנים ניצח, כלומר אין לו חיילים על הלוח ואין לו אכולים, אם יש מנצח היא מציגה הודעה ומאתחלת את המשחק
 {
     var whiteExists = false;
     var blackExists = false;
@@ -492,18 +490,25 @@ function checkwinner()
     }
 
     // אם לבן לא קיים על הלוח ואין לו אכולים (והוא התחיל להוציא)
-    if (!whiteExists && whiteEaten === 0)
+    if (!whiteExists && whiteEaten == 0)
     {
         alert("White wins!");
         resetGame();
     }
     // אם שחור לא קיים על הלוח ואין לו אכולים
-    else if (!blackExists && blackEaten === 0)
+    else if (!blackExists && blackEaten == 0)
     {
         alert("Black wins!");
         resetGame();
     }
 }
-
-updateBoardVisuals();
+function backgroundmusic()
+{
+    var bgMusic = new Audio('backgroundmusic.mp3');
+    bgMusic.loop = true; // המוזיקה תחזור על עצמה
+    bgMusic.volume = 0.2; // ווליום עדין כדי לא להפריע
+    bgMusic.play();
+}
+backgroundmusic()
 checkwinner();
+updateBoardVisuals();

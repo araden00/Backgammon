@@ -7,51 +7,54 @@
 <body>
 
 
-    <table class="board" style="border:solid" >
-    
-     <tr>
-         <td>
-             <img id="img0" class="lines" onclick="move(0)" src="upsideblack.png" />
-             <img id="img1" class="lines" onclick="move(1)" src="upsidewhite.png" />
-             <img id="img2" class="lines" onclick="move(2)" src="upsideblack.png" />
-             <img id="img3" class="lines" onclick="move(3)" src="upsidewhite.png" />
-             <img id="img4" class="lines" onclick="move(4)" src="upsideblack.png" />
-             <img id="img5" class="lines" onclick="move(5)" src="upsidewhite.png" />
+    <table class="board" style="border:solid">
 
-             <img src="blackline-removebg-preview.png" />
+        <tr>
+            <td>
+                <img id="img0" class="lines" onclick="move(0)" src="upsideblack.png" />
+                <img id="img1" class="lines" onclick="move(1)" src="upsidewhite.png" />
+                <img id="img2" class="lines" onclick="move(2)" src="upsideblack.png" />
+                <img id="img3" class="lines" onclick="move(3)" src="upsidewhite.png" />
+                <img id="img4" class="lines" onclick="move(4)" src="upsideblack.png" />
+                <img id="img5" class="lines" onclick="move(5)" src="upsidewhite.png" />
 
-             <img id="img6" class="lines" onclick="move(6)" src="upsideblack.png" />
-             <img id="img7" class="lines" onclick="move(7)" src="upsidewhite.png" />
-             <img id="img8" class="lines" onclick="move(8)" src="upsideblack.png" />
-             <img id="img9" class="lines" onclick="move(9)" src="upsidewhite.png" />
-             <img id="img10" class="lines" onclick="move(10)" src="upsideblack.png" />
-             <img id="img11" class="lines" onclick="move(11)" src="upsidewhite.png" />
-         </td>
-     </tr>
-     <br/>
-     <tr>
-         <td>
-         
-         <img id="img23" class="lines" onclick="move(23)" src="white.png" />
-         <img id="img22" class="lines" onclick="move(22)" src="black.png" />
-         <img id="img21" class="lines" onclick="move(21)" src="white.png" />
-         <img id="img20" class="lines" onclick="move(20)" src="black.png" />
-         <img id="img19" class="lines" onclick="move(19)" src="white.png" />
-         <img id="img18" class="lines" onclick="move(18)" src="black.png" />
+                <img src="blackline-removebg-preview.png" />
 
-         <img src="blackline-removebg-preview.png" />
+                <img id="img6" class="lines" onclick="move(6)" src="upsideblack.png" />
+                <img id="img7" class="lines" onclick="move(7)" src="upsidewhite.png" />
+                <img id="img8" class="lines" onclick="move(8)" src="upsideblack.png" />
+                <img id="img9" class="lines" onclick="move(9)" src="upsidewhite.png" />
+                <img id="img10" class="lines" onclick="move(10)" src="upsideblack.png" />
+                <img id="img11" class="lines" onclick="move(11)" src="upsidewhite.png" />
+            </td>
+        </tr>
+        <br />
+        <tr>
+            <td>
 
-         <img id="img17" class="lines" onclick="move(17)" src="white.png" />
-         <img id="img16" class="lines" onclick="move(16)" src="black.png" />
-         <img id="img15" class="lines" onclick="move(15)" src="white.png" />
-         <img id="img14" class="lines" onclick="move(14)" src="black.png" />
-         <img id="img13" class="lines" onclick="move(13)" src="white.png" />
-         <img id="img12" class="lines" onclick="move(12)" src="black.png" />
-    </td>
-     </tr>
+                <img id="img23" class="lines" onclick="move(23)" src="white.png" />
+                <img id="img22" class="lines" onclick="move(22)" src="black.png" />
+                <img id="img21" class="lines" onclick="move(21)" src="white.png" />
+                <img id="img20" class="lines" onclick="move(20)" src="black.png" />
+                <img id="img19" class="lines" onclick="move(19)" src="white.png" />
+                <img id="img18" class="lines" onclick="move(18)" src="black.png" />
+
+                <img src="blackline-removebg-preview.png" />
+
+                <img id="img17" class="lines" onclick="move(17)" src="white.png" />
+                <img id="img16" class="lines" onclick="move(16)" src="black.png" />
+                <img id="img15" class="lines" onclick="move(15)" src="white.png" />
+                <img id="img14" class="lines" onclick="move(14)" src="black.png" />
+                <img id="img13" class="lines" onclick="move(13)" src="white.png" />
+                <img id="img12" class="lines" onclick="move(12)" src="black.png" />
+            </td>
+        </tr>
     </table>
     <img id="dice2" class="dice" onclick="diceroll()" src="dice_1-removebg-preview.png" />
     <img id="dice1" class="dice" onclick="diceroll()" src="dice_1-removebg-preview.png" />
+    <button id="skipBtn" onclick="skipTurn()" class="dice" : background-color: orange; style="width: 300px; height:300px; font-size: 100px;" text-align: center">
+        skip turn
+    </button>
     <img class="dice" onclick="resetGame()" src="restart.jpg" />
     <script src="Backgammon.js"></script>
     <link href="Backgammon.css" rel="stylesheet" />
