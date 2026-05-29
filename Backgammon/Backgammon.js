@@ -41,19 +41,21 @@ function diceroll()// מגריל שתי קוביות מ1-6 אם נשארו קו�
 }
 function playerturn()// פונקציה שמחזירה את השחקן הנוכחי על פי מספר התור, היא גם מעדכנת את משתנה currentPlayer שניתן להשתמש בו בפונקציה move כדי לדעת איזה חיילים מותר להזיז
 {
+    var noticeturn = document.getElementById("visturn");
     if (countturn % 2 == 0)
     {
+        noticeturn.innerHTML = "Player black turn";
         /*alert("Player 1's turn");*/
         countturn++;
         return 1;
     }
     else
     {
+        noticeturn.innerHTML = "Player white turn";
         /*alert("Player 2's turn");*/
         countturn++;
         return 2;
     }
-
 }
 function move(clickedIndex)// פונקציה שמטפלת בלחיצות על הלוח, היא צריכה לטפל בשלושה מצבים: 1. אם יש חיילים אכולים, היא צריכה לנסות להכניס אותם חזרה ללוח במקום המתאים. 2. אם השחקן יכול להתחיל להוציא חיילים (כל החיילים שלו בבית ואין לו אכולים), לחיצה כפולה על חייל תוציא אותו מהמשחק. 3. בחירה ותנועה רגילה של חיילים, כולל בדיקת חוקי התנועה והאכילה.
 {
@@ -256,7 +258,7 @@ function skipTurn()// פונקציה שמאפשרת לשחקן לדלג על ת�
     currentPlayer = playerturn();
 
     // 4. הודעה לשחקן
-    alert("אין מהלכים חוקיים, התור עובר ליריב.");
+    /*alert("אין מהלכים חוקיים, התור עובר ליריב.");*/
 
     // 5. איפוס הבחירה למקרה שחייל היה מסומן
     selectedIndex = -1;
@@ -276,21 +278,39 @@ function finishTurnIfNeeded() // בודקת אם יש קוביות שנותרו 
     }
     if (!movesLeft) currentPlayer = playerturn();
 }
-function updateBoardVisuals()// פונקציה שמעדכנת את התמונות על פי מצב הלוח הנוכחי, יש להפעיל אותה אחרי כל שינוי בלוח עוברת על המארח של הלוח ומדביקה תמונות בהתאם
+function updateBoardVisuals()// פונקציה שמעדכנת את הלוח הויזואלי בהתאם למצב הנוכחי של המערך startpositionboard, היא עוברת על כל המשבצות ומעדכנת את התמונה המתאימה לפי כמות הכלים שיש בכל משבצת, היא גם מפעילה סאונד של תזוזת כלי בכל פעם שהיא נקראת
 {
+    eatenpiecesvisual()
     for (var i = 0; i < 24; i++)
     {
         var count = startpositionboard[i];
-        var imgElement = document.getElementById("img" + i); // וודא שב-HTML ה-ID הוא img0, img1...
+        var imgElement = document.getElementById("img" + i);
 
         if (!imgElement)
         {
             continue;
         }
 
-        var direction = (i <= 11) ? "upside" : "";
-        var boardColor = (i % 2 == 0) ? "black" : "white";
+        // --- החלפת הקיצור של הכיוון ---
+        var direction;
+        if (i <= 11)
+        {
+            direction = "upside";
+        } else
+        {
+            direction = "";
+        }
 
+        // --- החלפת הקיצור של צבע המשבצת ---
+        var boardColor;
+        if (i % 2 == 0)
+        {
+            boardColor = "black";
+        } else {
+            boardColor = "white";
+        }
+
+        // עדכון התמונה בהתאם לכמות הכלים
         if (count > 0)
         {
             imgElement.src = direction + boardColor + "-" + count + "white.png";
@@ -304,6 +324,8 @@ function updateBoardVisuals()// פונקציה שמעדכנת את התמונו�
             imgElement.src = direction + boardColor + ".png";
         }
     }
+
+    // הפעלת סאונד
     var movesound = new Audio('piecemovesound.mp3');
     movesound.volume = 0.3;
     movesound.play();
@@ -321,7 +343,7 @@ function resetGame()// פונקציה שמאתחלת את המשחק למצב ה
     location.reload(); 
     alert("המשחק אותחל מחדש!");
 }
-function reEnterPiece(clickedIndex)
+function reEnterPiece(clickedIndex)// פונקציה שמטפלת בלחיצה על לוח כאשר יש חיילים אכולים, היא מנסה להכניס את החייל האכול חזרה ללוח במקום המתאים לפי הקוביות שיש, אם זה לא אפשרי היא לא עושה כלום
 {
     var turnOwner;
     if (countturn % 2 == 0)
@@ -508,6 +530,11 @@ function backgroundmusic()
     bgMusic.loop = true; // המוזיקה תחזור על עצמה
     bgMusic.volume = 0.2; // ווליום עדין כדי לא להפריע
     bgMusic.play();
+}
+function eatenpiecesvisual()// פונקציה שמעדכנת את הויזואל של החיילים האכולים, היא מעדכנת את האלמנטים שמראים כמה חיילים אכולים יש לכל שחקן לפי המשתנים whiteEaten וblackEaten
+{
+    var eatenPiecesDiv = document.getElementById("eatenpieces");
+    eatenPiecesDiv.innerHTML = "White eaten: " + whiteEaten + "<br>" + "Black eaten: " + blackEaten;
 }
 backgroundmusic()
 checkwinner();
